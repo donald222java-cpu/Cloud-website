@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelForge Store | Gaming PCs &amp; Gaming Laptops</title>
+
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #0b0d1a;
+    --panel: #14172b;
+    --cyan: #00f0ff;
+    --pink: #ff2e97;
+    --purple: #8a5cff;
+    --gold: #ffc94d;
+    --green: #3dff9a;
+    --text: #e6e9ff;
+    --muted: #b9bfe6;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--text);
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(#ffffff08 1px, transparent 1px),
+      linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+    background-size: 40px 40px;
+    line-height: 1.5;
+  }
+  nav {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    padding: 14px 28px; background: #070813ee; border-bottom: 1px solid var(--purple);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .logo { font-weight: bold; letter-spacing: 2px; color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+  nav .links a { color: var(--text); text-decoration: none; margin-right: 18px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+  nav .links a:hover { color: var(--pink); }
+  .cartbtn {
+    background: transparent; color: var(--text); border: 1px solid var(--cyan); border-radius: 8px;
+    padding: 8px 16px; cursor: pointer; font-size: 15px;
+  }
+  .cartbtn:hover { background: var(--cyan); color: var(--bg); }
+  .cartbtn b { background: var(--pink); color: #fff; border-radius: 12px; padding: 1px 8px; margin-left: 6px; font-size: 13px; }
+
+  .button {
+    display: inline-block; padding: 12px 26px; border: 0; cursor: pointer; font-size: 14px;
+    color: var(--bg); background: var(--cyan); text-decoration: none; border-radius: 6px;
+    font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 14px #00f0ff88;
+    transition: transform .2s, background .2s, box-shadow .2s;
+  }
+  .button:hover { background: var(--pink); box-shadow: 0 0 22px var(--pink); transform: translateY(-2px); }
+  .button.sm { padding: 8px 14px; font-size: 12px; }
+  .button.ghost { background: transparent; color: var(--text); border: 1px solid var(--purple); box-shadow: none; }
+  .button.ghost:hover { background: var(--purple); }
+  .button:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  header.hero {
+    padding: 80px 20px 60px; text-align: center;
+    background: radial-gradient(circle at 50% 0%, #8a5cff55, transparent 65%);
+  }
+  h1 { font-size: 46px; margin: 0 0 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); text-shadow: 0 0 12px var(--cyan), 0 0 35px var(--purple); }
+  .tagline { font-size: 19px; color: var(--pink); margin-bottom: 26px; }
+  .promo { display: inline-block; margin-top: 22px; padding: 10px 18px; border: 1px dashed var(--gold); border-radius: 8px; color: var(--gold); }
+  .perks { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; max-width: 900px; margin: 34px auto 0; }
+  .perk { flex: 1 1 190px; padding: 14px; background: var(--panel); border: 1px solid var(--purple); border-radius: 10px; font-size: 14px; }
+  .perk b { display: block; color: var(--cyan); }
+
+  section { max-width: 1100px; margin: auto; padding: 44px 20px; }
+  h2 { color: var(--pink); text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px #ff2e9766; text-align: center; margin-top: 0; }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; margin: 22px 0; }
+  .chip { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--purple); background: transparent; color: var(--text); cursor: pointer; font-size: 13px; }
+  .chip:hover { border-color: var(--cyan); }
+  .chip.on { background: var(--cyan); color: var(--bg); border-color: var(--cyan); font-weight: bold; }
+  input, select, textarea {
+    padding: 10px 12px; border-radius: 6px; border: 1px solid var(--purple);
+    background: #070813; color: var(--text); font: inherit;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cyan); }
+
+  .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+  .product {
+    position: relative; background: var(--panel); border: 1px solid var(--purple); border-radius: 12px;
+    padding: 20px 16px; text-align: center; box-shadow: 0 0 14px #8a5cff33;
+    transition: transform .2s, border-color .2s, box-shadow .2s; display: flex; flex-direction: column;
+  }
+  .product:hover { transform: translateY(-5px); border-color: var(--cyan); box-shadow: 0 0 22px #00f0ff55; }
+  .product .icon { font-size: 54px; cursor: pointer; }
+  .product h3 { margin: 8px 0 2px; color: var(--cyan); font-size: 17px; cursor: pointer; }
+  .product .cat { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .stars { color: var(--gold); font-size: 14px; margin: 6px 0; }
+  .price { font-size: 22px; font-weight: bold; margin: 6px 0 12px; }
+  .price s { color: var(--muted); font-size: 14px; font-weight: normal; margin-left: 6px; }
+  .product .button { margin-top: auto; }
+  .badge { position: absolute; top: 10px; left: 10px; background: var(--pink); color: #fff; font-size: 11px; font-weight: bold; padding: 3px 9px; border-radius: 12px; }
+  .badge.low { background: var(--gold); color: #000; left: auto; right: 10px; }
+  .specs { color: var(--muted); font-size: 12px; margin: 2px 0 4px; min-height: 32px; }
+  .spectable { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  .spectable td { padding: 7px 4px; border-bottom: 1px solid #ffffff18; text-align: left; }
+  .spectable td:first-child { color: var(--pink); width: 34%; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+
+  /* Overlays */
+  .overlay { position: fixed; inset: 0; background: #000b; display: none; z-index: 40; }
+  .overlay.open { display: block; }
+  #drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 420px; background: var(--panel);
+    border-left: 2px solid var(--cyan); z-index: 50; padding: 18px; display: none; flex-direction: column;
+    box-shadow: -10px 0 40px #00f0ff33;
+  }
+  #drawer.open { display: flex; }
+  .dhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .dhead b { color: var(--cyan); font-size: 20px; }
+  .xbtn { background: transparent; color: var(--text); border: 1px solid var(--pink); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  .xbtn:hover { background: var(--pink); }
+  #cartItems { flex: 1; overflow-y: auto; }
+  .item { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #ffffff18; }
+  .item .ic { font-size: 32px; }
+  .item .info { flex: 1; font-size: 14px; }
+  .item .info b { display: block; }
+  .item .info span { color: var(--muted); }
+  .qty { display: flex; align-items: center; gap: 6px; }
+  .qty button { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--purple); background: #070813; color: var(--text); cursor: pointer; }
+  .qty button:hover { border-color: var(--cyan); }
+  .rm { background: none; border: 0; color: var(--pink); cursor: pointer; font-size: 12px; }
+  .totals { border-top: 1px solid #ffffff22; padding-top: 12px; font-size: 14px; }
+  .totals div { display: flex; justify-content: space-between; margin: 4px 0; }
+  .totals .grand { font-size: 19px; font-weight: bold; color: var(--cyan); margin-top: 8px; }
+  .promorow { display: flex; gap: 8px; margin: 12px 0; }
+  .promorow input { flex: 1; text-transform: uppercase; }
+  #promoMsg { font-size: 13px; min-height: 18px; }
+  .ok { color: var(--green); } .bad { color: var(--pink); }
+
+  .modal { position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center; padding: 14px; background: #000b; }
+  .modal.open { display: flex; }
+  .box { background: var(--panel); border: 2px solid var(--cyan); border-radius: 12px; padding: 22px; width: 100%; max-width: 480px; max-height: 94vh; overflow-y: auto; box-shadow: 0 0 40px #00f0ff55; }
+  .box h3 { color: var(--cyan); margin: 0 0 8px; }
+  .box label { display: block; margin: 12px 0 4px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .box input, .box select, .box textarea { width: 100%; }
+  .box .row { display: flex; gap: 10px; margin-top: 16px; }
+  .bigicon { font-size: 70px; text-align: center; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 12px; }
+
+  footer { padding: 28px; text-align: center; background: #070813; border-top: 2px solid var(--pink); color: #9aa0cc; margin-top: 30px; }
+  #toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--cyan); color: var(--bg); padding: 10px 20px; border-radius: 8px; font-weight: bold; z-index: 80; display: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">PIXELFORGE STORE</div>
+  <div class="links">
+    <a href="#shop">Shop</a>
+    <a href="#deals" id="dealsLink">Deals</a>
+    <a href="#about">About</a>
+  </div>
+  <button class="cartbtn" id="openCart">&#128722; Cart <b id="count">0</b></button>
+</nav>
+
+<header class="hero">
+  <h1>PixelForge Store</h1>
+  <div class="tagline">Gaming PCs &amp; gaming laptops built to win.</div>
+  <a class="button" href="#shop">Shop PCs &amp; Laptops</a>
+  <div><div class="promo">Use code <b>LEVELUP10</b> for 10% off your order, or <b>STUDENT15</b> for 15% off with a student ID</div></div>
+  <div class="perks">
+    <div class="perk"><b>Free shipping</b>On orders over $500</div>
+    <div class="perk"><b>1-year warranty</b>On every PC and laptop</div>
+    <div class="perk"><b>30-day returns</b>If it is not the right fit</div>
+    <div class="perk"><b>Tested before shipping</b>Stress-tested and ready to play</div>
+  </div>
+</header>
+
+<section id="shop">
+  <h2>Shop</h2>
+  <div class="tools">
+    <div id="chips"></div>
+    <input id="search" type="search" placeholder="Search products...">
+    <select id="budget">
+      <option value="all">Any budget</option>
+      <option value="u500">Under $500</option>
+      <option value="m">$500 - $999</option>
+      <option value="o1000">$1,000 and up</option>
+    </select>
+    <select id="sort">
+      <option value="featured">Sort: Featured</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+      <option value="rating">Top Rated</option>
+    </select>
+  </div>
+  <div class="products" id="products"></div>
+</section>
+
+<section id="about">
+  <h2>About the Store</h2>
+  <p style="text-align:center;color:var(--muted);max-width:700px;margin:auto">
+    PixelForge Store sells gaming PCs and gaming laptops for every budget, from first-time builds to
+    high-end rigs. Every system is tested before it ships, comes with a one-year warranty, and has
+    its full specs listed so you know exactly what you are buying.
+  </p>
+</section>
+
+<footer>
+  <p>Created by CCSA Group XX</p>
+  <p>Powered by Amazon EC2</p>
+</footer>
+
+<!-- Cart drawer -->
+<div class="overlay" id="overlay"></div>
+<aside id="drawer">
+  <div class="dhead"><b>&#128722; Your Cart</b><button class="xbtn" id="closeCart">&#10005; Close</button></div>
+  <div id="cartItems"></div>
+  <div class="promorow">
+    <input id="promo" placeholder="Promo code">
+    <button class="button sm ghost" id="applyPromo">Apply</button>
+  </div>
+  <div id="promoMsg"></div>
+  <div class="totals">
+    <div><span>Subtotal</span><span id="tSub">$0.00</span></div>
+    <div><span>Discount</span><span id="tDisc">-$0.00</span></div>
+    <div><span>Shipping</span><span id="tShip">$0.00</span></div>
+    <div class="grand"><span>Total</span><span id="tTotal">$0.00</span></div>
+  </div>
+  <button class="button" id="checkoutBtn" style="margin-top:14px">Checkout</button>
+</aside>
+
+<!-- Product details modal -->
+<div class="modal" id="pModal"><div class="box" id="pBox"></div></div>
+
+<!-- Checkout modal -->
+<div class="modal" id="cModal">
+  <div class="box" id="cBox">
+    <h3>Checkout</h3>
+    <label for="cName">Full name</label><input id="cName" type="text">
+    <label for="cEmail">Email</label><input id="cEmail" type="email">
+    <label for="cAddr">Delivery address</label><textarea id="cAddr" rows="2"></textarea>
+    <label for="cPay">Payment method</label>
+    <select id="cPay">
+      <option>Credit / Debit Card</option>
+      <option>E-wallet</option>
+      <option>Cash on Delivery</option>
+    </select>
+    <div id="cSummary" class="note"></div>
+    <div id="cErr" class="bad" style="margin-top:10px;font-size:13px"></div>
+    <div class="row">
+      <button class="button" id="placeOrder">Place Order</button>
+      <button class="button ghost" id="cancelOrder">Cancel</button>
+    </div>
+    <div class="note">Demo store: no real payment is taken and no card details are collected.</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  /* ---------- Catalog ---------- */
+  const products = [
+    { id: 1, name: 'Rookie Rig', cat: 'Gaming PCs', price: 799, old: 899, icon: '🖥️', rating: 4.5, stock: 12,
+      desc: 'A great entry into PC gaming. Runs modern games smoothly at 1080p with high settings.',
+      specs: [['CPU','Ryzen 5 7600'],['GPU','RTX 4060 8 GB'],['RAM','16 GB DDR5'],['Storage','1 TB NVMe SSD'],['Cooling','Air cooler'],['Warranty','1 year']] },
+    { id: 2, name: 'Striker Rig', cat: 'Gaming PCs', price: 1199, old: 1299, icon: '🖥️', rating: 4.7, stock: 9,
+      desc: 'The sweet spot for 1440p gaming and streaming, with plenty of headroom for years of new releases.',
+      specs: [['CPU','Ryzen 7 7700'],['GPU','RTX 4070 12 GB'],['RAM','32 GB DDR5'],['Storage','1 TB NVMe SSD'],['Cooling','240 mm liquid cooler'],['Warranty','1 year']] },
+    { id: 3, name: 'Titan Rig', cat: 'Gaming PCs', price: 1799, old: 1999, icon: '🖥️', rating: 4.9, stock: 4,
+      desc: 'Flagship performance for 4K gaming, ray tracing, and heavy creative work.',
+      specs: [['CPU','Ryzen 9 7900X'],['GPU','RTX 4080 Super 16 GB'],['RAM','32 GB DDR5'],['Storage','2 TB NVMe SSD'],['Cooling','360 mm liquid cooler'],['Warranty','1 year']] },
+    { id: 4, name: 'Mini Cube SFF', cat: 'Gaming PCs', price: 949, old: null, icon: '🧊', rating: 4.4, stock: 7,
+      desc: 'A compact small-form-factor gaming PC that fits on a dorm desk without giving up performance.',
+      specs: [['CPU','Core i5-14400F'],['GPU','RTX 4060 Ti 8 GB'],['RAM','16 GB DDR5'],['Storage','1 TB NVMe SSD'],['Size','14 L case'],['Warranty','1 year']] },
+    { id: 5, name: 'Streamer Pro', cat: 'Gaming PCs', price: 1499, old: 1649, icon: '🎥', rating: 4.8, stock: 6,
+      desc: 'Built to game and stream at the same time, with extra cores and fast storage for capture and editing.',
+      specs: [['CPU','Core i7-14700F'],['GPU','RTX 4070 Super 12 GB'],['RAM','32 GB DDR5'],['Storage','2 TB NVMe SSD'],['Cooling','240 mm liquid cooler'],['Warranty','1 year']] },
+    { id: 6, name: 'Student Gamer 15', cat: 'Gaming Laptops', price: 499, old: 579, icon: '💻', rating: 4.1, stock: 20,
+      desc: 'An affordable laptop for classes and casual gaming. A good first gaming laptop on a tight budget.',
+      specs: [['CPU','Core i5-12450H'],['GPU','RTX 3050 4 GB'],['RAM','16 GB DDR4'],['Storage','512 GB SSD'],['Display','15.6" FHD 144 Hz'],['Battery','Up to 6 hours']] },
+    { id: 7, name: 'Rookie Book 15', cat: 'Gaming Laptops', price: 699, old: null, icon: '💻', rating: 4.4, stock: 15,
+      desc: 'A balanced 15-inch gaming laptop with a fast screen and enough power for most popular titles.',
+      specs: [['CPU','Ryzen 5 7640HS'],['GPU','RTX 4050 6 GB'],['RAM','16 GB DDR5'],['Storage','512 GB NVMe SSD'],['Display','15.6" FHD 144 Hz'],['Battery','Up to 7 hours']] },
+    { id: 8, name: 'Striker Book 16', cat: 'Gaming Laptops', price: 999, old: 1149, icon: '💻', rating: 4.7, stock: 10,
+      desc: 'A 16-inch performance laptop with a high-refresh screen, great for competitive and AAA games.',
+      specs: [['CPU','Core i7-13700H'],['GPU','RTX 4060 8 GB'],['RAM','16 GB DDR5'],['Storage','1 TB NVMe SSD'],['Display','16" QHD+ 165 Hz'],['Battery','Up to 6 hours']] },
+    { id: 9, name: 'Slim Blade 14', cat: 'Gaming Laptops', price: 1249, old: null, icon: '⚡', rating: 4.6, stock: 5,
+      desc: 'A thin, light 14-inch gaming laptop with an OLED screen. Easy to carry to class and powerful enough to play.',
+      specs: [['CPU','Ryzen 9 8945HS'],['GPU','RTX 4060 8 GB'],['RAM','16 GB LPDDR5X'],['Storage','1 TB NVMe SSD'],['Display','14" OLED 120 Hz'],['Battery','Up to 9 hours']] },
+    { id: 10, name: 'Titan Book 17', cat: 'Gaming Laptops', price: 1999, old: 2199, icon: '🔥', rating: 4.8, stock: 3,
+      desc: 'A desktop-replacement laptop with top-tier graphics and a big, fast 17-inch display.',
+      specs: [['CPU','Core i9-14900HX'],['GPU','RTX 4080 12 GB'],['RAM','32 GB DDR5'],['Storage','2 TB NVMe SSD'],['Display','17.3" QHD 240 Hz'],['Battery','Up to 5 hours']] },
+    { id: 11, name: '27" Gaming Monitor', cat: 'Accessories', price: 179, old: 219, icon: '🖵', rating: 4.5, stock: 25,
+      desc: 'A fast 1440p monitor that gets the most out of any PC or laptop.',
+      specs: [['Size','27 inch'],['Resolution','2560 x 1440'],['Refresh','165 Hz'],['Panel','IPS, 1 ms']] },
+    { id: 12, name: 'Mechanical Keyboard', cat: 'Accessories', price: 49, old: null, icon: '⌨️', rating: 4.5, stock: 40,
+      desc: 'Hot-swappable switches and per-key RGB lighting in a solid aluminum frame.',
+      specs: [['Type','Mechanical, hot-swappable'],['Layout','Full size'],['Lighting','Per-key RGB']] },
+    { id: 13, name: 'Gaming Mouse', cat: 'Accessories', price: 29, old: null, icon: '🖱️', rating: 4.4, stock: 60,
+      desc: 'A lightweight mouse with a precise sensor and six programmable buttons.',
+      specs: [['Sensor','16,000 DPI'],['Buttons','6 programmable'],['Weight','75 g']] },
+    { id: 14, name: 'Laptop Cooling Pad', cat: 'Accessories', price: 19, old: null, icon: '❄️', rating: 4.2, stock: 35,
+      desc: 'Keeps your gaming laptop cooler for steadier frame rates during long sessions.',
+      specs: [['Fans','3 quiet fans'],['Fits','Up to 17-inch laptops'],['Power','USB']] }
+  ];
+  products.forEach(p => {
+    const keys = ['GPU', 'RAM', 'Storage'];
+    const parts = p.specs.filter(x => keys.includes(x[0])).map(x => x[1]);
+    p.short = parts.length ? parts.join(' · ') : p.specs.map(x => x[1]).slice(0, 2).join(' · ');
+  });
+  const cats = ['All'].concat([...new Set(products.map(p => p.cat))]);
+  const PROMOS = { LEVELUP10: 0.10, STUDENT15: 0.15 };
+  const FREE_SHIP_AT = 500, SHIP_FEE = 14.99;
+
+  const money = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const $ = id => document.getElementById(id);
+  const stars = r => '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r)) + ' <small style="color:var(--muted)">' + r.toFixed(1) + '</small>';
+
+  /* ---------- State ---------- */
+  let cart = {};          // { productId: qty }
+  let promoCode = '';
+  let activeCat = 'All';
+  try { cart = JSON.parse(localStorage.getItem('pf_cart') || '{}'); } catch (e) { cart = {}; }
+  function save() { try { localStorage.setItem('pf_cart', JSON.stringify(cart)); } catch (e) {} }
+
+  let toastTimer = null;
+  function toast(t) {
+    const el = $('toast'); el.textContent = t; el.style.display = 'block';
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.style.display = 'none'; }, 1800);
+  }
+
+  /* ---------- Product list ---------- */
+  function renderChips() {
+    $('chips').innerHTML = '';
+    cats.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'chip' + (c === activeCat ? ' on' : '');
+      b.textContent = c;
+      b.onclick = () => { activeCat = c; renderChips(); renderProducts(); };
+      $('chips').appendChild(b);
+    });
+  }
+
+  function inBudget(price) {
+    const b = $('budget').value;
+    if (b === 'u500') return price < 500;
+    if (b === 'm') return price >= 500 && price < 1000;
+    if (b === 'o1000') return price >= 1000;
+    return true;
+  }
+
+  function renderProducts() {
+    const q = $('search').value.trim().toLowerCase();
+    let list = products.filter(p => (activeCat === 'All' || p.cat === activeCat) &&
+      (p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.short.toLowerCase().includes(q)) &&
+      inBudget(p.price));
+    const s = $('sort').value;
+    if (s === 'low') list.sort((a, b) => a.price - b.price);
+    if (s === 'high') list.sort((a, b) => b.price - a.price);
+    if (s === 'rating') list.sort((a, b) => b.rating - a.rating);
+
+    const wrap = $('products');
+    wrap.innerHTML = '';
+    if (!list.length) { wrap.innerHTML = '<div class="empty" style="grid-column:1/-1">No products match your search.</div>'; return; }
+    list.forEach(p => {
+      const d = document.createElement('div');
+      d.className = 'product';
+      const pct = p.old ? Math.round((1 - p.price / p.old) * 100) : 0;
+      d.innerHTML =
+        (pct ? '<span class="badge">-' + pct + '%</span>' : '') +
+        (p.stock <= 5 ? '<span class="badge low">Only ' + p.stock + ' left</span>' : '') +
+        '<div class="icon">' + p.icon + '</div>' +
+        '<h3>' + p.name + '</h3>' +
+        '<div class="cat">' + p.cat + '</div>' +
+        '<div class="specs">' + p.short + '</div>' +
+        '<div class="stars">' + stars(p.rating) + '</div>' +
+        '<div class="price">' + money(p.price) + (p.old ? '<s>' + money(p.old) + '</s>' : '') + '</div>' +
+        '<button class="button sm">Add to Cart</button>';
+      d.querySelector('.icon').onclick = d.querySelector('h3').onclick = () => showProduct(p.id);
+      d.querySelector('.button').onclick = () => addToCart(p.id);
+      wrap.appendChild(d);
+    });
+  }
+
+  function showProduct(id) {
+    const p = products.find(x => x.id === id);
+    $('pBox').innerHTML =
+      '<div class="bigicon">' + p.icon + '</div>' +
+      '<h3>' + p.name + '</h3>' +
+      '<div class="cat" style="color:var(--muted);font-size:12px;text-transform:uppercase">' + p.cat + '</div>' +
+      '<div class="stars">' + stars(p.rating) + '</div>' +
+      '<p style="color:var(--muted)">' + p.desc + '</p>' +
+      '<table class="spectable">' + p.specs.map(x => '<tr><td>' + x[0] + '</td><td>' + x[1] + '</td></tr>').join('') + '</table>' +
+      '<div class="price">' + money(p.price) + (p.old ? '<s>' + money(p.old) + '</s>' : '') + '</div>' +
+      '<div class="note">' + (p.stock <= 5 ? 'Low stock: only ' + p.stock + ' left.' : 'In stock.') + '</div>' +
+      '<div class="row"><button class="button" id="pAdd">Add to Cart</button><button class="button ghost" id="pClose">Close</button></div>';
+    $('pAdd').onclick = () => { addToCart(id); $('pModal').classList.remove('open'); };
+    $('pClose').onclick = () => $('pModal').classList.remove('open');
+    $('pModal').classList.add('open');
+  }
+
+  /* ---------- Cart ---------- */
+  function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    const cur = cart[id] || 0;
+    if (cur >= p.stock) { toast('Only ' + p.stock + ' in stock'); return; }
+    cart[id] = cur + 1; save(); renderCart(); toast(p.name + ' added to cart');
+  }
+  function setQty(id, q) {
+    const p = products.find(x => x.id === id);
+    if (q <= 0) delete cart[id];
+    else if (q > p.stock) { toast('Only ' + p.stock + ' in stock'); return; }
+    else cart[id] = q;
+    save(); renderCart();
+  }
+
+  function totals() {
+    let sub = 0;
+    Object.keys(cart).forEach(id => { sub += products.find(p => p.id == id).price * cart[id]; });
+    const rate = PROMOS[promoCode] || 0;
+    const disc = sub * rate;
+    const after = sub - disc;
+    const ship = sub === 0 ? 0 : (after >= FREE_SHIP_AT ? 0 : SHIP_FEE);
+    return { sub: sub, disc: disc, ship: ship, total: after + ship };
+  }
+
+  function renderCart() {
+    const ids = Object.keys(cart);
+    $('count').textContent = ids.reduce((n, id) => n + cart[id], 0);
+    const box = $('cartItems');
+    box.innerHTML = '';
+    if (!ids.length) box.innerHTML = '<div class="empty">Your cart is empty.<br>Add some games or gear!</div>';
+    ids.forEach(id => {
+      const p = products.find(x => x.id == id);
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML =
+        '<div class="ic">' + p.icon + '</div>' +
+        '<div class="info"><b>' + p.name + '</b><span>' + money(p.price) + ' each</span><br><button class="rm">Remove</button></div>' +
+        '<div class="qty"><button>-</button><span>' + cart[id] + '</span><button>+</button></div>';
+      const b = row.querySelectorAll('.qty button');
+      b[0].onclick = () => setQty(p.id, cart[id] - 1);
+      b[1].onclick = () => setQty(p.id, cart[id] + 1);
+      row.querySelector('.rm').onclick = () => setQty(p.id, 0);
+      box.appendChild(row);
+    });
+    const t = totals();
+    $('tSub').textContent = money(t.sub);
+    $('tDisc').textContent = '-' + money(t.disc);
+    $('tShip').textContent = t.ship === 0 && t.sub > 0 ? 'FREE' : money(t.ship);
+    $('tTotal').textContent = money(t.total);
+    $('checkoutBtn').disabled = !ids.length;
+  }
+
+  function openCart() { $('drawer').classList.add('open'); $('overlay').classList.add('open'); }
+  function closeCart() { $('drawer').classList.remove('open'); $('overlay').classList.remove('open'); }
+  $('openCart').onclick = openCart;
+  $('closeCart').onclick = closeCart;
+  $('overlay').onclick = closeCart;
+
+  $('applyPromo').onclick = () => {
+    const code = $('promo').value.trim().toUpperCase();
+    const msg = $('promoMsg');
+    if (PROMOS[code]) { promoCode = code; msg.className = 'ok'; msg.textContent = 'Code applied: ' + Math.round(PROMOS[code] * 100) + '% off!'; }
+    else { promoCode = ''; msg.className = 'bad'; msg.textContent = code ? 'Invalid promo code.' : 'Enter a promo code.'; }
+    renderCart();
+  };
+
+  /* ---------- Checkout (demo) ---------- */
+  const checkoutHTML = $('cBox').innerHTML;
+  function openCheckout() {
+    $('cBox').innerHTML = checkoutHTML;
+    wireCheckout();
+    const t = totals();
+    $('cSummary').textContent = 'Order total: ' + money(t.total) + ' (' + $('count').textContent + ' items)';
+    $('cModal').classList.add('open');
+  }
+  function wireCheckout() {
+    $('cancelOrder').onclick = () => $('cModal').classList.remove('open');
+    $('placeOrder').onclick = () => {
+      const name = $('cName').value.trim(), email = $('cEmail').value.trim(), addr = $('cAddr').value.trim();
+      if (!name || !addr || !/^\S+@\S+\.\S+$/.test(email)) {
+        $('cErr').textContent = 'Please enter your name, a valid email, and a delivery address.';
+        return;
+      }
+      const t = totals();
+      const order = 'PF-' + Math.floor(100000 + Math.random() * 900000);
+      const pay = $('cPay').value;
+      cart = {}; promoCode = ''; save(); renderCart();
+      $('promo').value = ''; $('promoMsg').textContent = '';
+      $('cBox').innerHTML =
+        '<div class="bigicon">🎉</div><h3 style="text-align:center">Order placed!</h3>' +
+        '<p style="text-align:center;color:var(--muted)">Thank you, ' + name.replace(/</g, '&lt;') + '. Your order number is <b style="color:var(--cyan)">' + order + '</b>.<br>' +
+        'Total: ' + money(t.total) + ' &middot; ' + pay + '<br>A confirmation would be sent to the email you entered.</p>' +
+        '<div class="row"><button class="button" id="doneBtn">Keep Shopping</button></div>' +
+        '<div class="note">Demo store: this order was not sent anywhere.</div>';
+      $('doneBtn').onclick = () => { $('cModal').classList.remove('open'); closeCart(); };
+    };
+  }
+  $('checkoutBtn').onclick = openCheckout;
+
+  /* ---------- Misc wiring ---------- */
+  $('search').oninput = renderProducts;
+  $('sort').onchange = renderProducts;
+  $('budget').onchange = renderProducts;
+  $('dealsLink').onclick = e => {
+    e.preventDefault();
+    activeCat = 'All'; $('search').value = ''; $('sort').value = 'featured'; $('budget').value = 'all';
+    renderChips();
+    // show only discounted items first
+    const wrap = $('products'); renderProducts();
+    [...wrap.children].filter(c => !c.querySelector('.badge:not(.low)')).forEach(c => c.remove());
+    $('shop').scrollIntoView({ behavior: 'smooth' });
+    toast('Showing items on sale');
+  };
+  ['pModal', 'cModal'].forEach(id => $(id).addEventListener('click', e => { if (e.target === $(id)) $(id).classList.remove('open'); }));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { $('pModal').classList.remove('open'); $('cModal').classList.remove('open'); closeCart(); }
+  });
+
+  // Drop cart entries for products that no longer exist
+  Object.keys(cart).forEach(id => { if (!products.find(p => p.id == id)) delete cart[id]; });
+  renderChips(); renderProducts(); renderCart();
+</script>
+</body>
+</html>
