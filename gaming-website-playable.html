@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelForge Arena | Game Details, News &amp; Play</title>
+
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #0b0d1a;
+    --panel: #14172b;
+    --cyan: #00f0ff;
+    --pink: #ff2e97;
+    --purple: #8a5cff;
+    --gold: #ffc94d;
+    --text: #e6e9ff;
+    --muted: #b9bfe6;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--text);
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(#ffffff08 1px, transparent 1px),
+      linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+    background-size: 40px 40px;
+    line-height: 1.55;
+  }
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 8px;
+    padding: 14px 28px; background: #070813ee;
+    border-bottom: 1px solid var(--purple);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .logo { font-weight: bold; letter-spacing: 2px; color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+  nav a { color: var(--text); text-decoration: none; margin-left: 18px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+  nav a:hover { color: var(--pink); }
+
+  header {
+    padding: 90px 20px 70px; text-align: center;
+    background: radial-gradient(circle at 50% 0%, #8a5cff55, transparent 65%);
+  }
+  h1 { font-size: 50px; margin: 0 0 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); text-shadow: 0 0 12px var(--cyan), 0 0 35px var(--purple); }
+  .tagline { font-size: 20px; color: var(--pink); margin-bottom: 30px; }
+  .button {
+    display: inline-block; padding: 13px 30px; border: 0; cursor: pointer; font-size: 15px;
+    color: var(--bg); background: var(--cyan); text-decoration: none; border-radius: 6px;
+    font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 18px var(--cyan);
+    transition: transform .2s, background .2s, box-shadow .2s;
+  }
+  .button:hover { background: var(--pink); box-shadow: 0 0 25px var(--pink); transform: translateY(-3px); }
+
+  .stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; max-width: 900px; margin: 40px auto 0; }
+  .stat { flex: 1 1 170px; padding: 16px; background: var(--panel); border: 1px solid var(--purple); border-radius: 10px; }
+  .stat b { display: block; font-size: 28px; color: var(--cyan); }
+  .stat span { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+
+  section { max-width: 1000px; margin: auto; padding: 50px 20px; text-align: center; }
+  h2 { color: var(--pink); text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px #ff2e9766; }
+  .sub { color: var(--muted); max-width: 650px; margin: 0 auto 10px; }
+
+  .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; margin-top: 26px; }
+  .card {
+    background: var(--panel); padding: 24px 18px; border-radius: 10px; border: 1px solid var(--purple);
+    box-shadow: 0 0 14px #8a5cff44; flex: 1 1 210px; cursor: pointer;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .card:hover, .card.active { transform: translateY(-6px); border-color: var(--cyan); box-shadow: 0 0 22px #00f0ff77; }
+  .card .icon { font-size: 40px; }
+  .card h3 { color: var(--cyan); margin: 8px 0; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; }
+  .tag { display: inline-block; margin-top: 12px; padding: 3px 10px; font-size: 12px; border-radius: 20px; border: 1px solid var(--pink); color: var(--pink); }
+
+  /* Game details panel */
+  #details {
+    margin-top: 28px; padding: 28px; text-align: left;
+    background: var(--panel); border: 2px solid var(--cyan); border-radius: 12px; box-shadow: 0 0 25px #00f0ff44;
+  }
+  #details h3 { margin: 0 0 6px; color: var(--cyan); font-size: 26px; }
+  #details .desc { color: var(--muted); }
+  .facts { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
+  .fact { flex: 1 1 140px; padding: 12px; background: #0b0d1a; border-radius: 8px; border: 1px solid #ffffff18; }
+  .fact small { display: block; color: var(--pink); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+  .fact span { font-weight: bold; }
+  #details ul { padding-left: 20px; color: var(--muted); }
+  .hint { color: var(--muted); font-size: 14px; margin-top: 16px; }
+
+  /* Mini game */
+  .hud { display: flex; justify-content: center; gap: 30px; margin: 18px 0; font-size: 18px; }
+  .hud b { color: var(--cyan); }
+  #arena {
+    position: relative; height: 340px; max-width: 700px; margin: auto; overflow: hidden;
+    background: #070813; border: 2px solid var(--purple); border-radius: 10px;
+    box-shadow: 0 0 25px #8a5cff55; user-select: none;
+  }
+  #msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px; background: #070813cc; z-index: 2; }
+  .target {
+    position: absolute; width: 54px; height: 54px; border-radius: 50%; cursor: crosshair;
+    background: radial-gradient(circle, #fff 0 12%, var(--pink) 13% 40%, #fff 41% 52%, var(--pink) 53%);
+    box-shadow: 0 0 18px var(--pink); animation: pop .15s ease-out;
+  }
+  @keyframes pop { from { transform: scale(.3); } to { transform: scale(1); } }
+
+  table { margin: 22px auto 0; border-collapse: collapse; width: 100%; max-width: 650px; }
+  th, td { padding: 11px; border-bottom: 1px solid #ffffff18; text-align: left; }
+  th { color: var(--cyan); text-transform: uppercase; font-size: 13px; }
+  .lb tr td:first-child { color: var(--pink); font-weight: bold; }
+
+  /* News */
+  .news { text-align: left; }
+  .news .card { cursor: default; }
+  .news .date { color: var(--gold); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* FAQ */
+  details.faq { max-width: 700px; margin: 12px auto; text-align: left; background: var(--panel); border: 1px solid var(--purple); border-radius: 8px; padding: 14px 18px; }
+  details.faq summary { cursor: pointer; font-weight: bold; color: var(--cyan); }
+  details.faq p { color: var(--muted); margin: 10px 0 0; }
+
+  /* Contact */
+  .contact { max-width: 520px; margin: 24px auto 0; text-align: left; }
+  .contact label { display: block; margin: 12px 0 4px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .contact input, .contact select, .contact textarea {
+    width: 100%; padding: 11px; border-radius: 6px; border: 1px solid var(--purple);
+    background: #070813; color: var(--text); font: inherit;
+  }
+  .contact button { margin-top: 18px; }
+  #thanks { margin-top: 16px; color: var(--cyan); display: none; }
+
+  footer { padding: 28px; text-align: center; background: #070813; border-top: 2px solid var(--pink); color: #9aa0cc; }
+
+  /* Playable game window */
+  .button.sm { padding: 9px 16px; font-size: 13px; }
+  .cardplay { margin-top: 14px; }
+  #playGame { margin-top: 10px; }
+  #modal { position: fixed; inset: 0; background: #000b; display: none; align-items: center; justify-content: center; z-index: 50; padding: 12px; }
+  #modal.open { display: flex; }
+  .box { background: var(--panel); border: 2px solid var(--cyan); border-radius: 12px; padding: 16px; width: 100%; max-width: 440px; max-height: 96vh; overflow: auto; box-shadow: 0 0 40px #00f0ff55; text-align: center; position: relative; }
+  .gbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .gbar b { color: var(--cyan); font-size: 20px; }
+  .gbar button { background: transparent; color: var(--text); border: 1px solid var(--pink); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  .gbar button:hover { background: var(--pink); }
+  .box canvas { width: 100%; display: block; background: #070813; border: 1px solid var(--purple); border-radius: 8px; touch-action: none; }
+  .gtxt { color: var(--muted); font-size: 14px; margin: 8px 0; }
+  .meter { height: 16px; background: #070813; border: 1px solid var(--purple); border-radius: 8px; overflow: hidden; }
+  .meter i { display: block; height: 100%; width: 100%; background: var(--pink); transition: width .2s; }
+  .meter.me i { background: var(--cyan); }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0; }
+  .row button:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+  .glog { min-height: 24px; color: var(--gold); font-size: 14px; }
+  .mgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+  .mcard { aspect-ratio: 1; font-size: 30px; border-radius: 8px; border: 1px solid var(--purple); background: #070813; color: var(--text); cursor: pointer; }
+  .mcard:hover { border-color: var(--cyan); }
+  .mcard.up { background: #1c2145; border-color: var(--cyan); cursor: default; }
+  .gend { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: #070813ee; font-size: 22px; border-radius: 10px; padding: 20px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">PIXELFORGE ARENA</div>
+  <div>
+    <a href="#games">Games</a>
+    <a href="#play">Play</a>
+    <a href="#leaderboard">Leaderboard</a>
+    <a href="#news">News</a>
+    <a href="#requirements">Specs</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Join</a>
+  </div>
+</nav>
+
+<header>
+  <h1>PixelForge Arena</h1>
+  <div class="tagline">Play. Compete. Level up.</div>
+  <a class="button" href="#games">Browse Games</a>
+  <div class="stats">
+    <div class="stat"><b>4</b><span>Featured Games</span></div>
+    <div class="stat"><b>12K+</b><span>Active Players</span></div>
+    <div class="stat"><b>Weekly</b><span>Tournaments</span></div>
+    <div class="stat"><b>24/7</b><span>Online Servers</span></div>
+  </div>
+</header>
+
+<section id="games">
+  <h2>Featured Games</h2>
+  <p class="sub">Click a game to see its full details, then press Play to launch it right here in your browser.</p>
+  <div class="grid" id="gameGrid"></div>
+  <div id="details"></div>
+</section>
+
+<section id="play">
+  <h2>Play Now: Target Blitz</h2>
+  <p class="sub">Click as many targets as you can in 30 seconds. Your best score is saved on this device.</p>
+  <div class="hud">
+    <span>Score: <b id="score">0</b></span>
+    <span>Time: <b id="time">30</b>s</span>
+    <span>Best: <b id="best">0</b></span>
+  </div>
+  <div id="arena">
+    <div id="msg">
+      <div id="msgText">Ready, player?</div>
+      <button class="button" id="startBtn">Start Game</button>
+    </div>
+  </div>
+</section>
+
+<section id="leaderboard">
+  <h2>Leaderboard</h2>
+  <table class="lb">
+    <tr><th>Rank</th><th>Player</th><th>Score</th></tr>
+    <tr><td>1</td><td>NeoStriker</td><td>42</td></tr>
+    <tr><td>2</td><td>PixelQueen</td><td>38</td></tr>
+    <tr><td>3</td><td>ByteBlaster</td><td>35</td></tr>
+    <tr><td>4</td><td>You</td><td id="lbYou">0</td></tr>
+  </table>
+</section>
+
+<section id="news">
+  <h2>Latest News</h2>
+  <div class="grid news">
+    <div class="card">
+      <div class="date">Weekly</div>
+      <h3>Friday Night Brackets</h3>
+      <p>Sign up for the weekly Turbo Drift time trial. Top three racers win prizes and a spot on the leaderboard.</p>
+    </div>
+    <div class="card">
+      <div class="date">New Update</div>
+      <h3>Realm Raiders: Frost Keep</h3>
+      <p>A new dungeon, a new boss, and fresh gear sets arrive for squads of up to four players.</p>
+    </div>
+    <div class="card">
+      <div class="date">Community</div>
+      <h3>Squad Finder Opens</h3>
+      <p>Looking for teammates? Use the join form below and we will match you with players at your skill level.</p>
+    </div>
+  </div>
+</section>
+
+<section id="requirements">
+  <h2>System Requirements</h2>
+  <p class="sub">Recommended specs for the best experience across our PC titles.</p>
+  <table>
+    <tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr>
+    <tr><td>Operating System</td><td>Windows 10 (64-bit)</td><td>Windows 11 (64-bit)</td></tr>
+    <tr><td>Processor</td><td>Quad-core 2.5 GHz</td><td>6-core 3.5 GHz</td></tr>
+    <tr><td>Memory</td><td>8 GB RAM</td><td>16 GB RAM</td></tr>
+    <tr><td>Graphics</td><td>4 GB VRAM</td><td>8 GB VRAM</td></tr>
+    <tr><td>Storage</td><td>20 GB free</td><td>20 GB SSD</td></tr>
+    <tr><td>Internet</td><td>5 Mbps</td><td>25 Mbps or faster</td></tr>
+  </table>
+</section>
+
+<section id="faq">
+  <h2>FAQ</h2>
+  <details class="faq"><summary>Is it free to play?</summary><p>Yes. Every featured game can be played for free. Optional cosmetic items are available in the shop.</p></details>
+  <details class="faq"><summary>Can I play with friends?</summary><p>Yes. Realm Raiders supports squads of four, and Turbo Drift and Star Siege support online matches.</p></details>
+  <details class="faq"><summary>How do tournaments work?</summary><p>Tournaments run weekly. Register on the join form, then show up at the scheduled time for your bracket.</p></details>
+  <details class="faq"><summary>Is my score saved?</summary><p>Your Target Blitz best score is stored in your browser on this device.</p></details>
+</section>
+
+<section id="contact">
+  <h2>Join the Arena</h2>
+  <p class="sub">Tell us what you like to play and we will get you into the next event.</p>
+  <div class="contact">
+    <label for="name">Player name</label>
+    <input id="name" type="text" placeholder="e.g. NeoStriker">
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="you@example.com">
+    <label for="pick">Favorite game</label>
+    <select id="pick"></select>
+    <label for="note">Message</label>
+    <textarea id="note" rows="3" placeholder="Anything we should know?"></textarea>
+    <button class="button" id="joinBtn">Sign Up</button>
+    <div id="thanks"></div>
+  </div>
+</section>
+
+<footer>
+  <p>Created by CCSA Group XX</p>
+  <p>Powered by Amazon EC2</p>
+</footer>
+
+<div id="modal">
+  <div class="box">
+    <div class="gbar"><b id="mTitle"></b><button id="mClose">&#10005; Close</button></div>
+    <div id="mBody"></div>
+  </div>
+</div>
+
+<script>
+  /* ---------- Game data ---------- */
+  const games = [
+    {
+      icon: '⚔️', name: 'Realm Raiders', genre: 'Action RPG',
+      short: 'Team up in epic dungeon raids and defeat the boss.',
+      desc: 'Fight through cursed dungeons with a squad, collect legendary loot, and take down towering bosses. Every run changes the map, so no two raids feel the same.',
+      players: '1-4 players', platforms: 'PC, Console', release: '2024', rating: '9.1 / 10', mode: 'Co-op',
+      features: ['Four character classes with skill trees', 'Randomized dungeons and loot', 'Seasonal boss events', 'Cross-platform squads']
+    },
+    {
+      icon: '🏎️', name: 'Turbo Drift', genre: 'Racing',
+      short: 'Race neon tracks and beat your friends\' lap times.',
+      desc: 'High-speed drift racing across neon cities and desert highways. Tune your car, master the corners, and chase the top spot on weekly time-trial boards.',
+      players: '1-8 players', platforms: 'PC, Mobile', release: '2023', rating: '8.7 / 10', mode: 'Online racing',
+      features: ['30+ tracks and 20 tunable cars', 'Ghost replays of friends', 'Weekly time-trial events', 'Photo mode and livery editor']
+    },
+    {
+      icon: '🚀', name: 'Star Siege', genre: 'Strategy',
+      short: 'Command your fleet and conquer the galaxy.',
+      desc: 'Build a fleet, manage resources, and outsmart rival commanders in real-time space battles. Form alliances or go solo to take control of the galaxy map.',
+      players: '2-6 players', platforms: 'PC', release: '2025', rating: '9.4 / 10', mode: 'Real-time strategy',
+      features: ['Fleet customization with 40+ ship types', 'Alliance and diplomacy system', 'Ranked ladder seasons', 'Replay and spectator mode']
+    },
+    {
+      icon: '🧩', name: 'Puzzle Quest', genre: 'Puzzle',
+      short: 'Fast brain-teasers to sharpen your mind.',
+      desc: 'Short, clever puzzles that get harder as you go. Perfect for a quick break between classes, with daily challenges and a global streak counter.',
+      players: '1 player', platforms: 'PC, Mobile, Web', release: '2022', rating: '8.5 / 10', mode: 'Single player',
+      features: ['500+ handcrafted puzzles', 'Daily challenge with streaks', 'Hint system and undo', 'Playable offline']
+    }
+  ];
+
+  const grid = document.getElementById('gameGrid');
+  const details = document.getElementById('details');
+  const pick = document.getElementById('pick');
+
+  function showGame(i) {
+    const g = games[i];
+    document.querySelectorAll('#gameGrid .card').forEach((c, idx) => c.classList.toggle('active', idx === i));
+    details.innerHTML =
+      '<h3>' + g.icon + ' ' + g.name + '</h3>' +
+      '<div class="desc">' + g.desc + '</div>' +
+      '<div class="facts">' +
+        '<div class="fact"><small>Genre</small><span>' + g.genre + '</span></div>' +
+        '<div class="fact"><small>Players</small><span>' + g.players + '</span></div>' +
+        '<div class="fact"><small>Platforms</small><span>' + g.platforms + '</span></div>' +
+        '<div class="fact"><small>Released</small><span>' + g.release + '</span></div>' +
+        '<div class="fact"><small>Mode</small><span>' + g.mode + '</span></div>' +
+        '<div class="fact"><small>Rating</small><span>' + g.rating + '</span></div>' +
+      '</div>' +
+      '<strong>Key features</strong>' +
+      '<ul>' + g.features.map(f => '<li>' + f + '</li>').join('') + '</ul>' +
+      '<button class="button" id="playGame">&#9654; Play ' + g.name + '</button>';
+    document.getElementById('playGame').addEventListener('click', () => launch(i));
+  }
+
+  games.forEach((g, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<div class="icon">' + g.icon + '</div><h3>' + g.name + '</h3><p>' + g.short +
+      '</p><span class="tag">' + g.genre + '</span><br><button class="button sm cardplay">&#9654; Play</button>';
+    card.addEventListener('click', () => showGame(i));
+    card.querySelector('.cardplay').addEventListener('click', e => { e.stopPropagation(); showGame(i); launch(i); });
+    grid.appendChild(card);
+
+    const opt = document.createElement('option');
+    opt.textContent = g.name;
+    pick.appendChild(opt);
+  });
+  showGame(0);
+
+  /* ---------- Playable featured games ---------- */
+  const modal = document.getElementById('modal');
+  const mBody = document.getElementById('mBody');
+  const mTitle = document.getElementById('mTitle');
+  let stopGame = null, currentGame = 0;
+
+  function launch(i) {
+    closeGame();
+    currentGame = i;
+    mTitle.textContent = games[i].icon + ' ' + games[i].name;
+    modal.classList.add('open');
+    stopGame = games[i].run(mBody);
+  }
+  function closeGame() {
+    if (stopGame) { stopGame(); stopGame = null; }
+    modal.classList.remove('open');
+    mBody.innerHTML = '';
+    modal.querySelectorAll('.gend').forEach(n => n.remove());
+  }
+  document.getElementById('mClose').addEventListener('click', closeGame);
+  modal.addEventListener('click', e => { if (e.target === modal) closeGame(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGame(); });
+
+  function endPanel(body, text) {
+    const d = document.createElement('div');
+    d.className = 'gend';
+    d.innerHTML = '<div>' + text + '</div>';
+    const b = document.createElement('button');
+    b.className = 'button';
+    b.textContent = 'Play Again';
+    b.onclick = () => launch(currentGame);
+    d.appendChild(b);
+    body.parentNode.appendChild(d);
+  }
+
+  /* Realm Raiders: turn-free boss battle */
+  function raiders(body) {
+    let boss = 100, me = 100, potions = 3, cool = 0, over = false;
+    body.innerHTML =
+      '<p class="gtxt">Defeat the Frost Warden before he defeats you!</p>' +
+      '<div class="gtxt">Frost Warden</div><div class="meter"><i id="rb"></i></div>' +
+      '<div class="gtxt">You</div><div class="meter me"><i id="rm"></i></div>' +
+      '<div class="row"><button class="button sm" id="ra">&#9876;&#65039; Attack</button>' +
+      '<button class="button sm" id="rs">&#128165; Special</button>' +
+      '<button class="button sm" id="rh">&#129514; Potion</button></div>' +
+      '<div class="glog" id="rl">The fight begins!</div>';
+    const q = id => body.querySelector('#' + id);
+    const log = t => { q('rl').textContent = t; };
+    const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+    let t = null;
+    function draw() {
+      q('rb').style.width = Math.max(boss, 0) + '%';
+      q('rm').style.width = Math.max(me, 0) + '%';
+      q('rs').textContent = cool > 0 ? '\u{1F4A5} Special (' + cool + ')' : '\u{1F4A5} Special';
+      q('rh').textContent = '\u{1F9EA} Potion (' + potions + ')';
+      q('ra').disabled = over;
+      q('rs').disabled = over || cool > 0;
+      q('rh').disabled = over || potions < 1;
+    }
+    function finish(win) {
+      over = true; clearInterval(t); draw();
+      endPanel(body, win ? '\u{1F3C6} Victory! The Frost Warden falls.' : '\u{1F480} You were defeated.');
+    }
+    function check() { if (boss <= 0) finish(true); else if (me <= 0) finish(false); }
+    q('ra').onclick = () => { if (over) return; const d = rnd(6, 13); boss -= d; log('You strike for ' + d + ' damage.'); draw(); check(); };
+    q('rs').onclick = () => { if (over || cool > 0) return; const d = rnd(20, 30); boss -= d; cool = 4; log('Special attack! ' + d + ' damage!'); draw(); check(); };
+    q('rh').onclick = () => { if (over || potions < 1) return; potions--; me = Math.min(100, me + 30); log('You drink a potion (+30 HP).'); draw(); };
+    t = setInterval(() => {
+      if (over) return;
+      const d = rnd(5, 12);
+      me -= d;
+      if (cool > 0) cool--;
+      log('The Frost Warden hits you for ' + d + '!');
+      draw(); check();
+    }, 1500);
+    draw();
+    return () => clearInterval(t);
+  }
+
+  /* Turbo Drift: lane dodger */
+  function drift(body) {
+    body.innerHTML = '<canvas width="320" height="420"></canvas><div class="gtxt">Steer with &larr; &rarr; or A / D. On mobile, tap the left or right side.</div>';
+    const cv = body.querySelector('canvas'), c = cv.getContext('2d');
+    const W = 320, H = 420, LW = W / 3;
+    let lane = 1, obs = [], score = 0, speed = 3, spawn = 0, off = 0, over = false, raf = 0;
+    function key(e) {
+      const k = e.key.toLowerCase();
+      if (k === 'arrowleft' || k === 'a') { lane = Math.max(0, lane - 1); e.preventDefault(); }
+      if (k === 'arrowright' || k === 'd') { lane = Math.min(2, lane + 1); e.preventDefault(); }
+    }
+    function tap(e) {
+      const r = cv.getBoundingClientRect();
+      lane = (e.clientX - r.left < r.width / 2) ? Math.max(0, lane - 1) : Math.min(2, lane + 1);
+    }
+    document.addEventListener('keydown', key);
+    cv.addEventListener('pointerdown', tap);
+    function loop() {
+      if (over) return;
+      speed += 0.0015; score += speed / 60; off = (off + speed) % 40; spawn--;
+      if (spawn <= 0) { obs.push({ lane: Math.floor(Math.random() * 3), y: -40 }); spawn = Math.max(18, 60 - score / 4); }
+      obs.forEach(o => { o.y += speed; });
+      obs = obs.filter(o => o.y < H + 40);
+      let crashed = false;
+      obs.forEach(o => { if (o.lane === lane && o.y + 36 > 345 && o.y < 385) crashed = true; });
+      c.fillStyle = '#070813'; c.fillRect(0, 0, W, H);
+      c.strokeStyle = '#8a5cff'; c.lineWidth = 3; c.setLineDash([20, 20]); c.lineDashOffset = -off;
+      for (let i = 1; i < 3; i++) { c.beginPath(); c.moveTo(i * LW, 0); c.lineTo(i * LW, H); c.stroke(); }
+      c.setLineDash([]);
+      c.fillStyle = '#ff2e97'; obs.forEach(o => c.fillRect(o.lane * LW + LW / 2 - 20, o.y, 40, 36));
+      c.fillStyle = '#00f0ff'; c.fillRect(lane * LW + LW / 2 - 18, 345, 36, 40);
+      c.fillStyle = '#e6e9ff'; c.font = 'bold 18px Arial'; c.fillText('Score: ' + Math.floor(score), 10, 24);
+      if (crashed) { over = true; endPanel(body, '\u{1F4A5} Crashed! Score: ' + Math.floor(score)); return; }
+      raf = requestAnimationFrame(loop);
+    }
+    loop();
+    return () => { over = true; cancelAnimationFrame(raf); document.removeEventListener('keydown', key); };
+  }
+
+  /* Star Siege: space shooter */
+  function siege(body) {
+    body.innerHTML = '<canvas width="320" height="420"></canvas><div class="gtxt">Move with &larr; &rarr; / A D, or drag. Your ship fires automatically.</div>';
+    const cv = body.querySelector('canvas'), c = cv.getContext('2d');
+    const W = 320, H = 420;
+    let x = W / 2, dir = 0, bullets = [], foes = [], score = 0, lives = 3, over = false, raf = 0, fire = 0, spawn = 0;
+    const isL = k => k === 'arrowleft' || k === 'a';
+    const isR = k => k === 'arrowright' || k === 'd';
+    function down(e) { const k = e.key.toLowerCase(); if (isL(k)) { dir = -1; e.preventDefault(); } if (isR(k)) { dir = 1; e.preventDefault(); } }
+    function up(e) { const k = e.key.toLowerCase(); if (isL(k) || isR(k)) dir = 0; }
+    function move(e) { const r = cv.getBoundingClientRect(); x = (e.clientX - r.left) * W / r.width; }
+    document.addEventListener('keydown', down);
+    document.addEventListener('keyup', up);
+    cv.addEventListener('pointermove', move);
+    cv.addEventListener('pointerdown', move);
+    function loop() {
+      if (over) return;
+      x = Math.min(W - 18, Math.max(18, x + dir * 5));
+      fire--; if (fire <= 0) { bullets.push({ x: x, y: 380 }); fire = 14; }
+      spawn--; if (spawn <= 0) { foes.push({ x: 20 + Math.random() * (W - 40), y: -20, v: 1.2 + Math.random() * 1.2 + score / 400 }); spawn = Math.max(20, 50 - score / 8); }
+      bullets.forEach(b => { b.y -= 7; });
+      foes.forEach(f => { f.y += f.v; });
+      foes.forEach(f => bullets.forEach(b => {
+        if (!f.dead && !b.dead && Math.abs(f.x - b.x) < 18 && Math.abs(f.y - b.y) < 18) { f.dead = b.dead = true; score += 10; }
+      }));
+      foes.forEach(f => {
+        if (f.dead) return;
+        if (f.y > H) { f.dead = true; lives--; }
+        else if (Math.abs(f.x - x) < 22 && Math.abs(f.y - 390) < 22) { f.dead = true; lives--; }
+      });
+      foes = foes.filter(f => !f.dead);
+      bullets = bullets.filter(b => !b.dead && b.y > -10);
+      c.fillStyle = '#070813'; c.fillRect(0, 0, W, H);
+      c.fillStyle = '#ffc94d'; bullets.forEach(b => c.fillRect(b.x - 2, b.y, 4, 12));
+      c.font = '24px Arial'; c.textAlign = 'center';
+      foes.forEach(f => c.fillText('\u{1F47E}', f.x, f.y + 8));
+      c.fillStyle = '#00f0ff'; c.beginPath(); c.moveTo(x, 372); c.lineTo(x - 16, 405); c.lineTo(x + 16, 405); c.closePath(); c.fill();
+      c.textAlign = 'left'; c.fillStyle = '#e6e9ff'; c.font = 'bold 16px Arial';
+      c.fillText('Score: ' + score, 10, 24);
+      c.fillText('Lives: ' + '\u2764\uFE0F'.repeat(Math.max(lives, 0)), 190, 24);
+      if (lives <= 0) { over = true; endPanel(body, '\u{1F680} Fleet lost! Score: ' + score); return; }
+      raf = requestAnimationFrame(loop);
+    }
+    loop();
+    return () => { over = true; cancelAnimationFrame(raf); document.removeEventListener('keydown', down); document.removeEventListener('keyup', up); };
+  }
+
+  /* Puzzle Quest: memory match */
+  function puzzle(body) {
+    const icons = ['\u{1F355}', '\u{1F3A7}', '\u{1F680}', '\u{1F525}', '\u{1F48E}', '\u{1F409}', '\u26A1', '\u{1F3AF}'];
+    const deck = icons.concat(icons).sort(() => Math.random() - 0.5);
+    let first = null, lock = false, moves = 0, found = 0, closed = false;
+    body.innerHTML = '<div class="gtxt">Moves: <b id="pm">0</b> &nbsp; Pairs: <b id="pp">0</b>/8</div><div class="mgrid"></div><div class="gtxt">Flip two cards to find matching pairs.</div>';
+    const g = body.querySelector('.mgrid');
+    deck.forEach(ic => {
+      const b = document.createElement('button');
+      b.className = 'mcard'; b.textContent = '?';
+      b.onclick = () => {
+        if (lock || b.classList.contains('up')) return;
+        b.classList.add('up'); b.textContent = ic;
+        if (!first) { first = b; return; }
+        moves++; body.querySelector('#pm').textContent = moves;
+        if (first.textContent === ic) {
+          found++; body.querySelector('#pp').textContent = found; first = null;
+          if (found === 8) endPanel(body, '\u{1F389} Solved in ' + moves + ' moves!');
+        } else {
+          lock = true; const a = first; first = null;
+          setTimeout(() => {
+            if (closed) return;
+            a.classList.remove('up'); a.textContent = '?';
+            b.classList.remove('up'); b.textContent = '?';
+            lock = false;
+          }, 700);
+        }
+      };
+      g.appendChild(b);
+    });
+    return () => { closed = true; };
+  }
+
+  games[0].run = raiders;
+  games[1].run = drift;
+  games[2].run = siege;
+  games[3].run = puzzle;
+
+  /* ---------- Contact form (front-end only) ---------- */
+  document.getElementById('joinBtn').addEventListener('click', () => {
+    const name = document.getElementById('name').value.trim();
+    const thanks = document.getElementById('thanks');
+    thanks.style.display = 'block';
+    thanks.textContent = name
+      ? 'Welcome to the arena, ' + name + '! We will see you at the next event.'
+      : 'Please enter a player name to sign up.';
+  });
+
+  /* ---------- Target Blitz ---------- */
+  const arena = document.getElementById('arena');
+  const msg = document.getElementById('msg');
+  const msgText = document.getElementById('msgText');
+  const scoreEl = document.getElementById('score');
+  const timeEl = document.getElementById('time');
+  const bestEl = document.getElementById('best');
+  const lbYou = document.getElementById('lbYou');
+
+  let score = 0, time = 30, best = 0, timer = null, running = false;
+
+  try { best = parseInt(localStorage.getItem('best') || '0', 10); } catch (e) {}
+  bestEl.textContent = best;
+  lbYou.textContent = best;
+
+  function spawnTarget() {
+    if (!running) return;
+    arena.querySelectorAll('.target').forEach(t => t.remove());
+    const t = document.createElement('div');
+    t.className = 'target';
+    t.style.left = Math.random() * (arena.clientWidth - 54) + 'px';
+    t.style.top = Math.random() * (arena.clientHeight - 54) + 'px';
+    t.addEventListener('mousedown', () => {
+      score++;
+      scoreEl.textContent = score;
+      spawnTarget();
+    });
+    arena.appendChild(t);
+  }
+
+  function startGame() {
+    score = 0; time = 30; running = true;
+    scoreEl.textContent = 0;
+    timeEl.textContent = 30;
+    msg.style.display = 'none';
+    spawnTarget();
+    timer = setInterval(() => {
+      time--;
+      timeEl.textContent = time;
+      if (time <= 0) endGame();
+    }, 1000);
+  }
+
+  function endGame() {
+    clearInterval(timer);
+    running = false;
+    arena.querySelectorAll('.target').forEach(t => t.remove());
+    if (score > best) {
+      best = score;
+      bestEl.textContent = best;
+      lbYou.textContent = best;
+      try { localStorage.setItem('best', best); } catch (e) {}
+      msgText.textContent = 'New high score: ' + score + '!';
+    } else {
+      msgText.textContent = 'Game over! Score: ' + score;
+    }
+    document.getElementById('startBtn').textContent = 'Play Again';
+    msg.style.display = 'flex';
+  }
+
+  document.getElementById('startBtn').addEventListener('click', startGame);
+</script>
+
+</body>
+</html>
